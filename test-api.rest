@@ -1,0 +1,29 @@
+# TEST API MENGGUNAKAN EKTENSI REST CLIENT
+
+# Get All Students
+# GET http://localhost:3000/api/v1/students
+
+# Get Data Student By ID
+# GET http://localhost:3000/api/v1/students/2
+
+# Post New Data Student
+# POST http://localhost:3000/api/v1/students
+# Content-Type: application/json
+
+# {
+#     "name": "Agus Rahman Hidayat",
+#     "generation": 20
+# }
+
+# Update/Put Data Student
+# PUT  http://localhost:3000/api/v1/students/1
+# Content-Type: application/json
+
+# {
+#     "name": "Wahyu Jebredz",
+#     "generation": 20,
+#     "present":1
+# }
+
+# Delete Data Student
+# DELETE http://localhost:3000/api/v1/students/3

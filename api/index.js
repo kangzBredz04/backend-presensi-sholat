@@ -1,5 +1,5 @@
 import express from "express";
-// import { connection } from "../db.js";
+import { connection } from "../db.js";
 
 const app = express();
 app.use(express.json());
@@ -9,40 +9,42 @@ app.get("/api/v1", async (_req, res) => {
   res.send("Hello world!");
 });
 
-// // Get all students
-// app.get("/api/v1/students", async (_req, res) => {
-//   const result = await connection.query("SELECT * FROM students");
-//   res.json(result);
-// });
+// Get all students
+app.get("/api/v1/students", async (_req, res) => {
+  const result = await connection.query("SELECT * FROM students");
+  res.json(result);
+});
 
-// // Add student
-// app.post("/api/v1/students", async (req, res) => {
-//   await connection.execute(
-//     `INSERT INTO students VALUES (NULL, '${req.body.name}', ${req.body.generation}, FALSE)`
-//   );
-//   res.send("Mahasiswa berhasil disimpan.");
-// });
+// Get student by ID
+app.get("/api/v1/students/:id", async (req, res) => {
+  const result = await connection.query("SELECT * FROM students WHERE id = ?", [
+    req.params.id,
+  ]);
+  res.json(result[0]);
+});
 
-// // Get student by ID
-// app.get("/api/v1/students/:id", async (req, res) => {
-//   const result = await connection.query(
-//     `SELECT * FROM students WHERE id = ${req.params.id}`
-//   );
-//   res.json(result[0]);
-// });
+// Add student
+app.post("/api/v1/students", async (req, res) => {
+  await connection.query(
+    "INSERT INTO students (name, generation, present) VALUES (?, ?, ?)",
+    [req.body.name, req.body.generation, false]
+  );
+  res.send("Mahasiswa berhasil disimpan.");
+});
 
-// // Edit student by ID
-// app.put("/api/v1/students/:id", async (req, res) => {
-//   await connection.execute(
-//     `UPDATE students SET name = '${req.body.name}', generation = ${req.body.generation}, present = ${req.body.present} WHERE id = ${req.params.id}`
-//   );
-//   res.send("Mahasiswa berhasil diedit.");
-// });
+// Edit student by ID
+app.put("/api/v1/students/:id", async (req, res) => {
+  await connection.query(
+    "UPDATE students SET name = ?, generation = ?, present = ? WHERE id = ?",
+    [req.body.name, req.body.generation, req.body.present, req.params.id]
+  );
+  res.send("Mahasiswa berhasil diedit.");
+});
 
-// // Delete student by ID
-// app.delete("/api/v1/students/:id", async (req, res) => {
-//   await connection.execute(`DELETE FROM students WHERE id = ${req.params.id}`);
-//   res.send("Mahasiswa berhasil dihapus.");
-// });
+// Delete student by ID
+app.delete("/api/v1/students/:id", async (req, res) => {
+  await connection.query("DELETE FROM students WHERE id = ?", [req.params.id]);
+  res.send("Mahasiswa berhasil dihapus.");
+});
 
 app.listen(3000, () => console.log("Server berhasil dijalankan."));
